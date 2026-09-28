@@ -114,7 +114,7 @@ export interface AppSettings {
 export const DEFAULT_SETTINGS: AppSettings = {
   provider: "zai",
   model: "glm-4.6",
-  theme: "dark",
+  theme: "light",
   targetScope: "",
   runtime: { ...DEFAULT_RUNTIME_PARAMS },
 };

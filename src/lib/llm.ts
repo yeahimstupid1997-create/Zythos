@@ -1,4 +1,7 @@
 import ZAI from "z-ai-web-dev-sdk";
+import { existsSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 export type ProviderId = "zai" | "openai" | "google" | "anthropic" | "openrouter";
 
@@ -27,7 +30,7 @@ export class ProviderError extends Error {
 const DEFAULT_MODELS: Record<ProviderId, string> = {
   zai: "glm-4.6",
   openai: "gpt-4o-mini",
-  google: "gemini-2.5-flash",
+  google: "gemini-3.8-flash",
   anthropic: "claude-3-5-haiku-latest",
   openrouter: "openai/gpt-4o-mini",
 };
@@ -40,7 +43,9 @@ function env(name: string): string | undefined {
 }
 
 function hasCredentials(provider: ProviderId): boolean {
-  if (provider === "zai") return true;
+  if (provider === "zai") {
+    return [join(process.cwd(), ".z-ai-config"), join(homedir(), ".z-ai-config"), "/etc/.z-ai-config"].some(existsSync);
+  }
   return Boolean(env({ openai: "OPENAI_API_KEY", google: "GOOGLE_API_KEY", anthropic: "ANTHROPIC_API_KEY", openrouter: "OPENROUTER_API_KEY" }[provider]));
 }
 
